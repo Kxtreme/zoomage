@@ -60,6 +60,7 @@ public class ZoomageView extends AppCompatImageView implements OnScaleGestureLis
 
     private float minScale = MIN_SCALE;
     private float maxScale = MAX_SCALE;
+    private OnScaleChange onScaleListener = null;
 
     //the adjusted scale bounds that account for an image's starting scale values
     private float calculatedMinScale = MIN_SCALE;
@@ -500,6 +501,9 @@ public class ZoomageView extends AppCompatImageView implements OnScaleGestureLis
                     if (allowZoom(event)) {
                         matrix.postScale(scaleBy, scaleBy, focusx, focusy);
                         currentScaleFactor = matrixValues[Matrix.MSCALE_X] / startValues[Matrix.MSCALE_X];
+                        if(onScaleListener != null) {
+                            onScaleListener.onEvent(currentScaleFactor);
+                        }
                     }
 
                     setImageMatrix(matrix);
@@ -914,5 +918,9 @@ public class ZoomageView extends AppCompatImageView implements OnScaleGestureLis
         @Override
         public void onAnimationRepeat(Animator animation) {
         }
+    }
+
+    public void setOnScaleListener(OnScaleChange onScaleListener) {
+        this.onScaleListener = onScaleListener;
     }
 }
